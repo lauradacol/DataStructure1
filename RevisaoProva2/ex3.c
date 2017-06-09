@@ -12,6 +12,15 @@ typedef struct lista{
 	struct lista * next;	
 }lista;
 
+void print(lista * p){
+	lista * aux = p;
+	
+	for(aux; aux!=NULL; aux = aux->next){
+		printf("%d ", aux->id);		
+	}
+	printf("\n");
+}
+
 lista * insert(lista * p, int id){
 	lista * nodo = malloc(sizeof(lista));
 	lista * aux;
@@ -22,16 +31,8 @@ lista * insert(lista * p, int id){
 	return nodo;
 
 }
-	
-void print(lista * p){
-	lista * aux = p;
-	
-	for(aux; aux!=NULL; aux = aux->next){
-		printf("%d ", aux->id);		
-	}
-	printf("\n");
-}
 
+//com for
 lista * invert(lista * p){
 	lista * aux = p;
 	lista *j = NULL;
@@ -45,6 +46,7 @@ lista * invert(lista * p){
 	
 }
 
+//recursiva
 lista * invert2(lista * p, lista * j){
 	if(p == NULL){
 		return j;
