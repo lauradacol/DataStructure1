@@ -12,42 +12,69 @@ typedef struct lista{
 	struct lista * next;	
 }lista;
 
-void insert(lista * p, int id){
+lista * insert(lista * p, int id){
 	lista * nodo = malloc(sizeof(lista));
 	lista * aux;
 
 	nodo->id = id;
 	nodo->next = p;
-	p = nodo;
 
-	}
+	return nodo;
+
+}
 	
 void print(lista * p){
 	lista * aux = p;
 	
-	for(aux; aux==NULL; aux = aux->next){
-		printf("%d ", aux->id);
-		}	
+	for(aux; aux!=NULL; aux = aux->next){
+		printf("%d ", aux->id);		
 	}
+	printf("\n");
+}
 
+lista * invert(lista * p){
+	lista * aux = p;
+	lista *j = NULL;
+	
+	
+	for(aux; aux!=NULL; aux = aux->next){
+		j = insert(j, aux->id);
+	}
+		
+	return j;
+	
+}
 
+lista * invert2(lista * p, lista * j){
+	if(p == NULL){
+		return j;
+	}
+		
+	else{
+		j = insert(j, p->id);
+		return invert2(p->next,j);	
+	}
+	
+}
+
+	
 int main(){
 
 	lista * p;
 	
 	p = NULL;
-
-	insert(p, 1);
-	insert(p, 2);
-	insert(p, 3);
+	
+	p = insert(p, 1);
+	p = insert(p, 2);
+	p = insert(p, 3);
 	
 	print(p);
 	
-
-
+	lista * j = invert(p);
+	print(j);
 	
+	lista * k = invert2(p, NULL);
+	print(k);
 	
-
-
-return 0;
+	return 0;
 }
