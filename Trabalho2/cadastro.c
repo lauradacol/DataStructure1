@@ -13,92 +13,234 @@ typedef struct lista{
 typedef struct head{
 	lista * first, * last;
 }head;
-
-//insere no primeiro da lista
-void insert_lista(head * h, int idade, char nome[30]){
-	lista * nodo = malloc(sizeof(lista));
 	
-	nodo->id = idade;
-	strcpy(nodo->nome, nome);	
-	nodo->next = h->first;
-	
+int empty(head * h){
 	if(h->first == NULL){
-		h->last = nodo;
-		}
-		
-	else{
-		h->first->prev = nodo;
-		}
-
-	h->first = nodo;		
-	nodo->prev = NULL;
-
+		return 0;
 	}
+	
+	else{
+		return 1;
+	}
+}
 
-//insere 'x' ordenado pelo id na lista apontada por '*l'
+//insere 'x' ordenado pelo id na lista'
 void insert_ordenado(head * h, int idade, char nome[30]){
-    lista * nodo = malloc (sizeof(lista));
-    lista * aux;
-
+	lista * nodo = malloc(sizeof(lista));
+	lista * aux;
+	
     //inicia os valores do nodo
 	nodo->id = idade;
-	strcpy(nodo->nome, nome);	
-
-    //encontra o lugar do elemento na lista
-    for(aux = h->first; (aux!=NULL) && (aux->id < nodo->id); aux = aux->next){
-			}			
-
-	//caso for o primeiro elemento
-	if(aux == NULL){
-		h->last = h->last = nodo;
-		printf("adicionou no primeiro\n");
-		}
-		
-	//caso seja o último elemento
-	else if(aux == h->last){
-		aux->next = nodo;
-		nodo->next = NULL;
-		nodo->prev = aux;
-		printf("adicionou no ultimo\n");		
-		}
+	strcpy(nodo->nome, nome);
 	
-	//caso seja inserido no meio
-	else{
-		aux->prev->next = nodo;
-		nodo->prev = aux->prev->next;
-		aux->prev = nodo;
-		nodo->next = aux;
-		printf("adicionou no ultimo\n");	
-	
-		
-		}
+	if(empty(h)==0){
+		h->first = h->last = nodo;
+		nodo->next = nodo->prev = NULL;
 	}
+		
+	else{
+
+		for(aux = h->first; (aux!=NULL && aux->id < idade); aux = aux->next){
+		}
+			
+		if(aux == h->first){
+			nodo->next = h->first;
+			h->first->prev = nodo;
+			nodo->prev = NULL;
+			h->first = nodo;
+		}
+				
+		else if(aux==NULL){
+			h->last->next = nodo;
+			nodo->prev = h->last;
+			nodo->next = NULL;
+			h->last = nodo;	
+		}
+		
+		else{
+			aux->prev->next = nodo;
+			nodo->prev = aux->prev;
+			nodo->next = aux;
+			aux->prev = nodo;	
+		}		
+	}	
+}
+
+/*
+//insere 'x' ordenado pelo nome na lista'
+void insert_ordenado(head * h, int idade, char nome[30]){
+	lista * nodo = malloc(sizeof(lista));
+	lista * aux;
+	
+    //inicia os valores do nodo
+	nodo->id = idade;
+	strcpy(nodo->nome, nome);
+	
+	if(empty(h)==0){
+		h->first = h->last = nodo;
+		nodo->next = nodo->prev = NULL;
+	}
+		
+	else{
+
+		for(aux = h->first; (aux!=NULL && aux->nome[0]<=nome[0]); aux = aux->next){
+		}
+			
+		if(aux == h->first){
+			nodo->next = h->first;
+			h->first->prev = nodo;
+			nodo->prev = NULL;
+			h->first = nodo;
+		}
+				
+		else if(aux==NULL){
+			h->last->next = nodo;
+			nodo->prev = h->last;
+			nodo->next = NULL;
+			h->last = nodo;	
+		}
+		
+		else{
+			aux->prev->next = nodo;
+			nodo->prev = aux->prev;
+			nodo->next = aux;
+			aux->prev = nodo;	
+		}		
+	}	
+}
+*/
+void delete_list(head * h, int idade, char nome[30]){
+	lista * aux;
+	
+	//caso em que a lista está vazia
+	if(empty(h)==0){
+		printf("Lista vazia\nOperação Inválida\n");
+		}
+	
+	else{
+		for(aux = h->first; (aux!=NULL && aux->id != idade && ((strcmp(aux->nome, nome))!=0)); aux = aux->next){
+		}	
+				
+		//caso o elemento não seja localizado
+		if(aux==NULL){
+			printf("Cadastro não localizado\n");
+		}
+		
+		else if(aux==h->first){
+			//caso em que só tem um elemento na lista
+			if(aux == h->last){
+				h->first == NULL;				
+			}
+				
+			//caso em que o elemento a ser excluido seja o primeiro	
+			else{
+				aux->next->prev = NULL;
+				h->first = aux;
+			}
+		}
+		
+		//caso o elemento a ser excluído seja o último
+		else if(aux==h->last && aux!=h->first){
+			aux->prev->next = NULL;
+			h->last = aux->prev;			
+		}
+		
+		//caso o elemento a ser excluído esteja no meio da lista
+		else{
+			aux->next->prev = aux->prev;
+			aux->prev->next = aux->next;
+		}
+		
+		free(aux);		
+	}	
+}
+
+lista * min_list(head * h){
+	return h->first;
+}
+
+lista * sucessor(head * h, int idade){
+	lista * aux;
+	
+	for(aux=h->first; aux->id!=idade; aux = aux->next){
+	}
+	
+	return aux->prev;
+}
 
 void print_lista(head * h){
 	lista * aux;
-	
+		
 	for(aux = h->first; aux != NULL; aux = aux->next){
 		printf("Nome: %s\n", aux->nome);
 		printf("Idade: %d\n\n", aux->id);
 		}		
 	}
 
+void print(lista * nodo){
+	printf("Nome: %s\n", nodo->nome);
+	printf("Idade: %d\n", nodo->id); 
+}
+
+int size(head * h){
+	int size = 0;
+	lista * aux;
+	
+	for(aux = h->first; aux != NULL; aux = aux->next){
+		size++;
+	}
+	
+	return size;
+}
+	
+void print_ordenado(head * h){
+	lista * aux, * aux2;
+	
+	char letra = 'a';
+	int count = 0;
+	
+//	for(aux = h->first; aux!= NULL; aux = aux->next){
+	while(count < size(h)){
+		for(aux = h->first; aux != NULL; aux = aux->next){
+			if(aux->nome[0] == letra){
+				print(aux);
+				count++;
+			}
+		}		
+		letra++;
+	}
+		
+}
 
 int main(){
 	
 	head h;
 	h.first = NULL;
 	h.last = NULL;
-	
+
 	insert_ordenado(&h, 30, "José");
-	insert_ordenado(&h, 25, "Maria");
-	insert_ordenado(&h, 50, "Maria");
-	insert_ordenado(&h, 45, "Maria");
+	insert_ordenado(&h, 25, "Cleonice");
+	insert_ordenado(&h, 50, "Marcelo");
+	insert_ordenado(&h, 45, "Bruna");
+	insert_ordenado(&h, 45, "Matilda");
+
+	printf("Imprimindo a lista que foi inserida\n");
+	print_ordenado(&h);	
+	printf("\n");
+
+	printf("Deletando Matilda da lista!\n");
+	delete_list(&h, 45, "Matilda");
+	print_ordenado(&h);
+	printf("\n");
 	
-//	insert_lista(&h, 30, "José");
-//	insert_lista(&h, 25, "Maria");	
-	
-	print_lista(&h);
+	printf("Mínimo da lista:\n");
+	print(min_list(&h));
+	printf("\n");
+		
+	printf("Sucessor de Marcelo (50 anos)\n");
+	print(sucessor(&h, 50));
+	printf("\n");
+
 	
 	return 0;
 	}
