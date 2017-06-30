@@ -3,7 +3,7 @@ def swap(l, i, j):
 	l[i] = l[j]
 	l[j] = aux
 		
-def quickSort(l):
+def split(l):
 	#Posição do vetor
 	iPivo = 0
 	
@@ -21,10 +21,18 @@ def quickSort(l):
 
 	swap(l, 0, iPivo)
 
+	return iPivo
+
+
+def quickSort(l, i, j):
+	
+	
+
+
 
 l = [5,3,2,8,9,1,0,7]
 print("L antes:")
 print(l)
-quickSort(l)
+split(l)
 print("L depois:")
 print(l)
