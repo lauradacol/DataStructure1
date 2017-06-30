@@ -41,6 +41,18 @@ void print_lista(head * h){
 		}		
 	}
 
+void printNodo(head * h, int x){
+	list * aux;
+		
+	for(aux = h->first; aux!=NULL; aux = aux->next){
+		if(aux->id = x){
+			break;
+		}
+	}
+	printf("%d\n", aux->id);	
+}
+
+/*
 void swap(head * h, list * a, list * b){
 	list *b_prev, *b_next, *a_prev, *a_next;
 	list *b_prev_next, *b_next_prev, *a_prev_next, *a_next_prev;
@@ -94,8 +106,32 @@ void swap(head * h, list * a, list * b){
 		b->next = a_next;		
 		}	
 			
+	}*/
+
+list * findList(head * h, int x){
+	list * aux;
+	
+	
+	for(aux = h->first; aux!=NULL; aux = aux->next){
+		if(aux->id == x){
+			break;
+		}
+	}	
+	return aux;
+}
+
+void swap(list * a, list * b){
+	int id_a, id_b;
+	
+	id_a = a->id;
+	id_b = b->id;
+
+	b->id = id_a;
+	a->id = id_b;
+	
 	}
 
+/*
 void insertion_sort(head * h){
 	list *i, *j;
 	
@@ -107,7 +143,7 @@ void insertion_sort(head * h){
 			j = j->next;	
 			}
 		}
-	}
+	}*/
 	
 
 
@@ -122,8 +158,11 @@ int main(){
 	insert_lista(&h,3);
 	insert_lista(&h,2);	
 	print_lista(&h);
+	printf("\n");
 	
-	insertion_sort(&h);
+	list *a = findList(&h, 5);
+	list *b = findList(&h, 2);
+	swap(a, b);
 	print_lista(&h);
 	
 	return 0;
