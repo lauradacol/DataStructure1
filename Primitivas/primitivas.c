@@ -354,9 +354,10 @@ void selectionSort(head * h){
 /*************************FUNÇÃO MERGE SORT****************************/
 /** Purpose: exchange the values of two nodes with each other.
  * @param head h, node a, node b whose values shall be exchanged.
+ * COMPLEXIDADE NO PIOR CASO: O(n log(n)) 
  */
 
-head * merge(head * h){
+head * mergeSort(head * h){
 	/*Se está vazia, retornar o próprio h*/
 	if(isEmpty(h)==1){
 		return h;
@@ -365,64 +366,58 @@ head * merge(head * h){
 	/*Se tem apenas um elemento, retornar o próprio h*/
 	if(oneElement(h)==1){
 		return h;
-	}
+	}	
+
+	/*Declara h2 que será a primeira metade da minha lista. h será 
+	 * a segunda metade*/
+	head * h2 = malloc(sizeof(head));
+	int middle = size(h)/2;
 	
-	else{
-		/*Declara h2 que será a primeira metade da minha lista. h será 
-		 * a segunda metade*/
-		head * h2 = malloc(sizeof(head));
-		int middle = size(h)/2;
+	/*Até a metade da lista, retiro de h e insiro em h2 para dividir*/
+	for(int i=0; i<middle; i++){
+		insertBegin(h2, removeBegin(h));		
+	}
 		
-		/*Até a metade da lista, retiro de h e insiro em h2 para dividir*/
-		for(int i=0; i<middle; i++){
-			insertBegin(h2, removeBegin(h));		
-		}
-		
-		
-		head * h3 = merge(h2);
-		head * h4 = merge(h);
-		
-		head * hResult;
-		
-		/*Até que uma das listas esteja vazia, remover o menor primeiro 
-		 * elemento e adicionar no final da hResult*/ 
-		while(isEmpty(h3)==0 && isEmpty(h4)==0){			
-			if(h3->first->x < h4->first->x){
-				insertEnd(hResult, (removeBegin(h3)));
-			}
-			
-			else if(h3->first->x > h4->first->x){
-				insertEnd(hResult, (removeBegin(h4)));
-			}
-		
-		/*A lista que sobrou, adicionar inteira no final do hResult
-		 * Um dos for não vai entrar, pois uma das listas vai sair do
-		 * while vazia*/
-		for(node * aux3 = h3->first; aux3!=NULL; aux3 = aux3->next){
+	head * h3 = mergeSort(h2);
+	head * h4 = mergeSort(h);		
+	head * hResult = malloc(sizeof(head));
+	
+	/*Até que uma das listas esteja vazia, remover o menor primeiro 
+	 * elemento e adicionar no final da hResult*/ 
+	while(isEmpty(h3)==0 && isEmpty(h4)==0){			
+		if(h3->first->x < h4->first->x){
 			insertEnd(hResult, (removeBegin(h3)));
 		}
 		
-		for(node * aux4 = h4->first; aux4!=NULL; aux4 = aux4->next){
+		else if(h3->first->x > h4->first->x){
 			insertEnd(hResult, (removeBegin(h4)));
 		}
-		
-		return hResult;			
-		}				 
+	
+	/*A lista que sobrou, adicionar inteira no final do hResult
+	 * Um dos for não vai entrar, pois uma das listas vai sair do
+	 * while vazia*/
+	for(node * aux3 = h3->first; aux3!=NULL; aux3 = aux3->next){
+		insertEnd(hResult, (removeBegin(h3)));
 	}
+	
+	for(node * aux4 = h4->first; aux4!=NULL; aux4 = aux4->next){
+		insertEnd(hResult, (removeBegin(h4)));
+	}
+	
+	return hResult;			
+	}				 
+
 }
-
-
-
 
 /**********************************************************************/
 
-
 int main(){
+	/** Instancia e inicializa os valores da cabeça h*/
 	head h;
 	h.first = NULL;
 	h.last = NULL;
 	
-	printf("vazio: %d\n", isEmpty(&h));	
+	/**Insere no começo da lista da cabeça h*/
 	insertBegin(&h, 1);
 	insertBegin(&h, 8);				
 	insertBegin(&h, 5);	
@@ -431,7 +426,10 @@ int main(){
 	insertBegin(&h, 7);		
 	printList(&h);
 
-	head * h3 = merge(&h);
+	/**Cria h3 que terá os nodos ordeandos de h através do merge sort*/
+	head * h3 = mergeSort(&h);
+	
+	
 	printf("\n");
 	printList(h3);	
 	
